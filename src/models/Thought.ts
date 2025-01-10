@@ -62,4 +62,22 @@ const thoughtSchema = new Schema<IThought>(
     },
 );
 
-// create getters to format the createdAt property for each schema.
+reactionSchema.virtual('createdAt').get(function (this: IReaction) {
+    const date = new Date(this.createdAt);
+    return date.toLocaleString();
+});
+
+thoughtSchema.virtual('createdAt').get(function (this: IThought) {
+    const date = new Date(this.createdAt);
+    return date.toLocaleString();
+});
+// these getters should return the date: (day/month/year) alongside the local time (hh:mm timezone)
+
+thoughtSchema.virtual('reactionCount').get(function (this: IThought) {
+    return this.reactions?.length;
+});
+// this will return the number of reactions to any given thought.
+
+const Thought = model('Thought', thoughtSchema);
+
+export default Thought;
