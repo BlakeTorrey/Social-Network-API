@@ -3,14 +3,24 @@ import { Schema, Document, model, ObjectId } from 'mongoose';
 interface IUser extends Document {
     username: String;
     email: String;
-    thoughts: ObjectId[];
-    friends: ObjectId[];
+    thoughts?: ObjectId[];
+    friends?: ObjectId[];
 }
 
 const userSchema = new Schema<IUser>(
     {
-        username: String,
-        email: String, // look up validation methods for emails using mongoose
+        username: {
+                type: String,
+                required: true,
+                unique: true,
+                trim: true,
+                },
+        email: {
+                type: String, 
+                required: true,
+                match: /.+\$.+\..+/,
+                unique: true,
+                },
         thoughts: [
             {
                 type: Schema.Types.ObjectId,
