@@ -45,9 +45,9 @@ const userSchema = new Schema<IUser>(
 
 
 
-const User = model('user', userSchema);
+const UserTemp = model('user', userSchema);
 
-export default User;
+export default UserTemp;
 
 
 // username (string, unique, required, trimmed)
