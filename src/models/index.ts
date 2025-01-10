@@ -1,4 +1,3 @@
-import User from "./User";
-import Thought from "./Thought";
+import User from "./Thought";
 
-export { User, Thought};
+export { User };
