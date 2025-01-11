@@ -2,7 +2,7 @@ import { User, Thought } from '../models/index';
 import { Request, Response } from 'express';
 
 
-export const GetAllUsers = async (_req: Request, res: Response) => {
+export const getAllUsers = async (_req: Request, res: Response) => {
     try {
         const users = await User.find();
         res.json(users);
@@ -13,7 +13,7 @@ export const GetAllUsers = async (_req: Request, res: Response) => {
 
 export const getSingleUser = async (req: Request, res: Response) => {
     try {
-        const user = await User.findOne({ _id: req.body }).select('-__v');
+        const user = await User.findOne({ _id: req.params.userId }).select('-__v');
 
         if (!user) {
             res.status(404).json({ message: 'No user with that ID' });
