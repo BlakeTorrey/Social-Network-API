@@ -1,4 +1,4 @@
-import { User, Thought } from '../models/index';
+import { User } from '../models/index';
 import { Request, Response } from 'express';
 
 export const addFriend = async (req: Request, res: Response) => {
