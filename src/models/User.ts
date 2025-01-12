@@ -18,7 +18,7 @@ const userSchema = new Schema<IUser>(
         email: {
                 type: String, 
                 required: true,
-                match: /.+\$.+\..+/,
+                match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                 unique: true,
                 },
         thoughts: [
@@ -38,6 +38,7 @@ const userSchema = new Schema<IUser>(
         toJSON: {
             virtuals: true,
         },
+        id: false
     }
 );
 

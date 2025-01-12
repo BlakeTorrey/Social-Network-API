@@ -1,14 +1,14 @@
-import { User, Thought } from '../models/index';
+import { User } from '../models/index.js';
 import { Request, Response } from 'express';
 
 export const addFriend = async (req: Request, res: Response) => {
     try {
         const { userId, friendId } = req.params;
-        if (!userId || friendId) {
+        if (!userId || !friendId) {
             return res.status(400).json({ message: 'unable to find user or friend ID' });
         }
 
-        const user = User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
             { _id: userId },
             { $addToSet: { friends: friendId } },
             { new: true, runValidators: true }
@@ -22,15 +22,16 @@ export const addFriend = async (req: Request, res: Response) => {
     } catch (err) {
         return res.status(500).json(err);
     }
-}
+;}
+
 export const removeFriend = async (req: Request, res: Response) => {
     try {
         const { userId, friendId } = req.params;
-        if (!userId || friendId ) {
+        if (!userId || !friendId ) {
             return res.status(400).json({ message: 'Unable to find user or friend ID'});
         }
 
-        const user = User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
             {_id: userId },
             { $pull: { friends: friendId} },
             {new: true, runValidators: true}

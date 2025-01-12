@@ -1,4 +1,4 @@
-import { Schema, model, Document, ObjectId } from 'mongoose';
+import { Schema, model, Document, ObjectId, Types } from 'mongoose';
 
 interface IReaction extends Document {
     reactionId: ObjectId;
@@ -17,7 +17,10 @@ interface IThought extends Document {
 
 const reactionSchema = new Schema<IReaction>(
     {
-        reactionId: { Type: Schema.Types.ObjectId },
+        reactionId: {
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId(),
+        },
         reactionBody: {
             type: String,
             required: true,
@@ -33,7 +36,8 @@ const reactionSchema = new Schema<IReaction>(
         toJSON: {
             virtuals: true,
             getters: true,
-        }
+        },
+        id: false
     }
 );
 
@@ -64,17 +68,17 @@ const thoughtSchema = new Schema<IThought>(
     },
 );
 
-
-
-reactionSchema.virtual('createdAt').get(function (this: IReaction) {
+thoughtSchema.virtual('thoughtsFormattedCreatedAt').get(function (this: IThought) {
     const date = new Date(this.createdAt);
     return date.toLocaleString();
 });
 
-thoughtSchema.virtual('createdAt').get(function (this: IThought) {
+reactionSchema.virtual('reactionsFormattedCreatedAt').get(function (this: IReaction) {
     const date = new Date(this.createdAt);
     return date.toLocaleString();
 });
+
+
 // these getters should return the date: (day/month/year) alongside the local time (hh:mm timezone)
 
 thoughtSchema.virtual('reactionCount').get(function (this: IThought) {
