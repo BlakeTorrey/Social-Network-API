@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {
     addFriend,
     removeFriend
-} from '../../controllers/friendController';
+} from '../../controllers/friendController.js';
 
 const router = Router();
 

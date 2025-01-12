@@ -1,4 +1,4 @@
-import { User, Thought } from "../models";
+import { User, Thought } from "../models/index.js";
 import { Response, Request } from 'express';
 
 export const getAllThoughts = async (_req: Request, res: Response) => {
@@ -12,7 +12,7 @@ export const getAllThoughts = async (_req: Request, res: Response) => {
 
 export const getSingleThought = async (req: Request, res: Response) => {
     try {
-        const thought = Thought.findOne({ _id: req.params.thoughtId }).select('-__v');
+        const thought = await Thought.findOne({ _id: req.params.thoughtId }).select('-__v');
 
         if (!thought) {
             return res.status(404).json({ message: 'No Thought with that ID' });
@@ -36,7 +36,7 @@ export const createThought = async (req: Request, res: Response) => {
         const newThought = await Thought.create({ username: username, thoughtText: thoughtText });
 
         const user = await User.findByIdAndUpdate(
-            { id: userId },
+            { _id: userId },
             { $push: { thoughts: newThought._id } },
             { new: true, runValidators: true }
         );
@@ -56,7 +56,7 @@ export const updateThought = async (req: Request, res: Response) => {
     try {
         const { thoughtId, thoughtText, username } = req.body
         const updateThought = await Thought.findOneAndUpdate(
-            { id: thoughtId },
+            { _id: thoughtId },
             { $set: {username: username, thoughtText: thoughtText} },
             { runValidators: true, new: true }
         );
@@ -79,14 +79,14 @@ export const deleteThought = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Unable to find userId or thoughtId'});
         }
 
-        const deleteThought = await Thought.findOneAndDelete({id: thoughtId});
+        const deleteThought = await Thought.findOneAndDelete({_id: thoughtId});
 
         if (!deleteThought) {
             return res.status(404).json({ message: 'Unable to delete thought'});
         }
 
         const user = await User.findOneAndUpdate(
-            {id: userId},
+            {_id: userId},
             {$pull: {thoughts: thoughtId}},
             {new: true}
         );
@@ -95,7 +95,7 @@ export const deleteThought = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Unable to remove Thought from User'});
         }
 
-        return res.json({ message: 'Deleted Thought, ', deleteThought, user});
+        return res.json({ message: "Deleted Thought, ", deleteThought, user});
     } catch (err) {
         return res.status(500).json(err);
     }

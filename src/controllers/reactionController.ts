@@ -1,5 +1,6 @@
-import { Thought } from "../models";
+import { Thought } from "../models/index.js";
 import { Request, Response } from "express";
+
 
 export const addReaction = async (req: Request, res: Response) => {
     try {
@@ -21,12 +22,18 @@ export const addReaction = async (req: Request, res: Response) => {
 
 export const removeReaction = async (req: Request, res: Response) => {
     try {
+        const { reactionId } = req.body;
+
+        if (!reactionId) {
+            return res.status(400).json({ message: "reaction ID is required." });
+        }
+
         const thought = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $pull : { reactions: { reactionId: req.body}}},
+            { $pull : { reactions: { _id: reactionId}}},
             { runValidators: true, new: true}   
         );
-
+        
         if (!thought) {
             return res.status(404).json({ message: 'No reaction found with that ID'});
         }
