@@ -134,5 +134,5 @@ Here are some demonstrations of what the data looks like using insomnia:
 ## Contributing
 Feel free to fork the project, create issues and submit pull requests. Contributions are welcome!
 
-##License
+## License
 This project is licensed under the MIT license.
